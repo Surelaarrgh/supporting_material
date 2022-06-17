@@ -1,3 +1,15 @@
+Parameters:
+  newlyVPC:
+      Description: VPC used to deploy our resources below
+      Type: AWS::EC2::VPC::Id
+  pubNet:
+      Description: Subnet to be used for our Web Server
+      Type: AWS::EC2::Subnet::Id
+  AMItoUse:
+      Description: AMI to use for our base image
+      Type: String
+
+
 Description: >
   Shola Akanni Bluefish / Udalearn
   This deploys a VPC
@@ -14,7 +26,12 @@ Resources:
       - Key: Type
         Value: Test Instance
       NetworkInterfaces:
-        AssociatePublicIpAddress: true
+        - AssociatePublicIpAddress: true
+          DeviceIndex: "0"
+          GroupSet: 
+            - Ref: "instanceSecurityGroup"
+          SubnetId: 
+            Ref: "pubNet"
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
@@ -23,7 +40,7 @@ Resources:
           sudo systemctl start httpd
           sudo systemctl enable httpd
 
-  InstanceSecurityGroup:
+  instanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Allow http to client host
@@ -53,16 +70,3 @@ Resources:
 
 
           #vpc-0f57b07aa611a483d
-
-  VPCcreate:
-    Type: AWS::EC2::
-    Properties:
-      CidrBlock: 10.0.0.0/16
-      EnableDnsSupport: 'true'
-      EnableDnsHostnames: 'true'
-      Tags:
-  #      - Key: stack
-  #        Value: production
-        - Key: name
-          Value: newlyVPC          
-          
