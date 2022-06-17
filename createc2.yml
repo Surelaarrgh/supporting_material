@@ -6,13 +6,22 @@ Resources:
   FirstEc2:
     Type: AWS::EC2::Instance
     Properties:
-      InstanceType: t2.micro
-      ImageId: ami-063dd30adbb186909
+      InstanceType: t3.micro
+      ImageId: ami-0cff7528ff583bf9a
       Tags:
       - Key: name
         Value: myfirsttestec2
       - Key: Type
         Value: Test Instance
+      NetworkInterfaces:
+        AssociatePublicIpAddress: true
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo yum update -y
+          sudo yum install -y httpd
+          sudo systemctl start httpd
+          sudo systemctl enable httpd
 
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -21,14 +30,14 @@ Resources:
       VpcId: !Ref newlyVPC
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: '*'
-          ToPort: '*'
-          CidrIp: 41.203.115.33/32
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: 0.0.0.0/0
       SecurityGroupEgress:
         - IpProtocol: tcp
           FromPort: '*'
           ToPort: '*'
-          CidrIp: 41.203.115.33/32
+          CidrIp: 0.0.0.0/0
 
   VPCcreate:
     Type: AWS::EC2::VPC
@@ -41,3 +50,19 @@ Resources:
   #        Value: production
         - Key: name
           Value: newlyVPC
+
+
+          #vpc-0f57b07aa611a483d
+
+  VPCcreate:
+    Type: AWS::EC2::
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: 'true'
+      EnableDnsHostnames: 'true'
+      Tags:
+  #      - Key: stack
+  #        Value: production
+        - Key: name
+          Value: newlyVPC          
+          
