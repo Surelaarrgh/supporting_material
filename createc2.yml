@@ -47,8 +47,8 @@ Resources:
       VpcId: !Ref newlyVPC
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: '80'
-          ToPort: '80'
+          FromPort: 80
+          ToPort: 80
           CidrIp: 0.0.0.0/0
       SecurityGroupEgress:
         - IpProtocol: tcp
@@ -63,10 +63,41 @@ Resources:
       EnableDnsSupport: 'true'
       EnableDnsHostnames: 'true'
       Tags:
-  #      - Key: stack
-  #        Value: production
         - Key: name
           Value: newlyVPC
 
+  subnet1Create:
+    Type: AWS::EC2::Subnet
+    Properties: 
+      AssignIpv6AddressOnCreation: false
+      AvailabilityZones: us-east-1a
+      AvailabilityZoneId: use2-az3
+      CidrBlock: 10.0.0.0/20
+      MapPublicIpOnLaunch: 'true'
+      Tags: 
+        - Tag
+      VpcId: !Ref newlyVPC
 
-          #vpc-0f57b07aa611a483d
+  subnet2Create:
+    Type: AWS::EC2::Subnet
+    Properties: 
+      AssignIpv6AddressOnCreation: 'false'
+      AvailabilityZones: us-east-1b
+      AvailabilityZoneId: use2-az2	
+      CidrBlock: 10.0.16.0/20
+      MapPublicIpOnLaunch: 'true'
+      Tags: 
+        - Tag
+      VpcId: !Ref newlyVPC
+
+  subnet3Create:
+    Type: AWS::EC2::Subnet
+    Properties: 
+      AssignIpv6AddressOnCreation: 'false'
+      AvailabilityZones: us-east-1c
+      AvailabilityZoneId: use2-az3
+      CidrBlock: 10.0.16.0/20
+      MapPublicIpOnLaunch: 'true'
+      Tags: 
+        - Tag
+      VpcId: !Ref newlyVPC
